@@ -16,7 +16,7 @@ class InMemoryPostRepository : PostRepository {
                     "18.05.22",
                     false,
                     999,
-                   3
+                   999
                 )
             })
 
