@@ -1,29 +1,31 @@
 package alex.pakshin.ru.netology.nmedia
 
 import alex.pakshin.ru.netology.nmedia.databinding.ActivityMainBinding
+import alex.pakshin.ru.netology.nmedia.viewModel.PostViewModel
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import java.text.DecimalFormat
 
 class MainActivity : AppCompatActivity() {
+
+    private val viewModel by viewModels<PostViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val post: Post = Post(0, "Alex", "Very important message", "18.05.22", false, 999)
-        binding.render(post)
+       viewModel.data.observe(this){
+           binding.render(it)
+       }
 
-        binding.likeIcon.setOnClickListener {
-            post.liked = !post.liked
-            if (post.liked) ++post.likeCount else --post.likeCount
-            binding.likeIcon.setImageResource(getLikeIcon(post.liked))
-            binding.likeCount.text = getDecimalFormat(post.likeCount)
+       binding.likeIcon.setOnClickListener {
+           viewModel.onLikeClicked()
         }
 
         binding.shareIcon.setOnClickListener {
-            ++post.shareCount
-            binding.shareCount.text = getDecimalFormat(post.shareCount)
+           viewModel.onShareClicked()
         }
     }
 
@@ -35,7 +37,6 @@ class MainActivity : AppCompatActivity() {
         likeCount.text = getDecimalFormat(post.likeCount)
         shareCount.text = getDecimalFormat(post.shareCount)
     }
-
 
     private fun getLikeIcon(liked: Boolean) =
         if (liked) R.drawable.ic_liked_24dp else R.drawable.ic_like_24dp
