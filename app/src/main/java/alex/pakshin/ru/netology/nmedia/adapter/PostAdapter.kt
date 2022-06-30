@@ -38,14 +38,15 @@ internal class PostAdapter(
                         else -> false
                     }
                 }
+                setOnDismissListener { binding.options.isChecked = false }
             }
         }
 
         init {
-            binding.likeIcon.setOnClickListener {
+            binding.like.setOnClickListener {
                 listener.onLikeClicked(post)
             }
-            binding.shareIcon.setOnClickListener {
+            binding.share.setOnClickListener {
                 listener.onShareClicked(post)
             }
         }
@@ -56,15 +57,13 @@ internal class PostAdapter(
                 authorName.text = post.author
                 date.text = post.published
                 content.text = post.content
-                likeIcon.setImageResource(getLikeIcon(post.liked))
-                likeCount.text = getDecimalFormat(post.likeCount)
-                shareCount.text = getDecimalFormat(post.shareCount)
+                like.isChecked = post.liked
+                like.text = getDecimalFormat(post.likeCount)
+                share.text = getDecimalFormat(post.shareCount)
                 options.setOnClickListener { popupMenu.show() }
+
             }
         }
-
-        private fun getLikeIcon(liked: Boolean) =
-            if (liked) R.drawable.ic_liked_24dp else R.drawable.ic_like_24dp
 
         private fun getDecimalFormat(count: Int): String = when {
             count < 1000 -> count.toString()
