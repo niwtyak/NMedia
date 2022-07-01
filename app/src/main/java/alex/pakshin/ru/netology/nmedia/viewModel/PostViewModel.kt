@@ -1,15 +1,19 @@
 package alex.pakshin.ru.netology.nmedia.viewModel
 
-import alex.pakshin.ru.netology.nmedia.data.Post
 import alex.pakshin.ru.netology.nmedia.adapter.PostInteractionListener
+import alex.pakshin.ru.netology.nmedia.data.Post
 import alex.pakshin.ru.netology.nmedia.data.PostRepository
-import alex.pakshin.ru.netology.nmedia.data.impl.InMemoryPostRepository
+import alex.pakshin.ru.netology.nmedia.data.impl.FilePostRepository
+import alex.pakshin.ru.netology.nmedia.data.impl.SharedPrefsPostRepository
 import alex.pakshin.ru.netology.nmedia.util.SingleLiveEvent
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 
-class PostViewModel : ViewModel(), PostInteractionListener {
-    private val repository: PostRepository = InMemoryPostRepository()
+class PostViewModel(
+    application: Application
+) : AndroidViewModel(application), PostInteractionListener {
+    private val repository: PostRepository = FilePostRepository(application)
 
     val data by repository::data
 
@@ -58,6 +62,6 @@ class PostViewModel : ViewModel(), PostInteractionListener {
     //endregion
 
     fun onAddButtonClicked() {
-      navigatePostContentScreenEvent.call()
+        navigatePostContentScreenEvent.call()
     }
 }
