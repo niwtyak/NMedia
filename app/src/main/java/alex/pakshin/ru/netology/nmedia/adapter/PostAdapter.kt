@@ -1,30 +1,53 @@
-package alex.pakshin.ru.netology.nmedia.data.impl
+package alex.pakshin.ru.netology.nmedia.adapter
 
 import alex.pakshin.ru.netology.nmedia.Post
 import alex.pakshin.ru.netology.nmedia.R
 import alex.pakshin.ru.netology.nmedia.databinding.PostBinding
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
 
 internal class PostAdapter(
-    private val onLikeClicked: (Post) -> Unit,
-    private val onShareClicked: (Post) -> Unit,
+    private val interactionListener: PostInteractionListener
 ) : ListAdapter<Post, PostAdapter.ViewHolder>(DiffCallback) {
 
-    inner class ViewHolder(private val binding: PostBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        private lateinit var post:Post
+    class ViewHolder(
+        private val binding: PostBinding,
+        listener: PostInteractionListener
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        private lateinit var post: Post
+
+        private val popupMenu by lazy {
+            PopupMenu(itemView.context, binding.options).apply {
+                inflate(R.menu.options_post)
+                setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.itemId) {
+                        R.id.remove -> {
+                            listener.onRemoveClicked(post)
+                            true
+                        }
+                        R.id.edit -> {
+                            listener.onEditClicked(post)
+                            true
+                        }
+                        else -> false
+                    }
+                }
+                setOnDismissListener { binding.options.isChecked = false }
+            }
+        }
 
         init {
-            binding.likeIcon.setOnClickListener {
-                onLikeClicked(post)
+            binding.like.setOnClickListener {
+                listener.onLikeClicked(post)
             }
-            binding.shareIcon.setOnClickListener {
-                onShareClicked(post)
+            binding.share.setOnClickListener {
+                listener.onShareClicked(post)
             }
         }
 
@@ -34,15 +57,13 @@ internal class PostAdapter(
                 authorName.text = post.author
                 date.text = post.published
                 content.text = post.content
-                likeIcon.setImageResource(getLikeIcon(post.liked))
-                likeCount.text = getDecimalFormat(post.likeCount)
-                shareCount.text = getDecimalFormat(post.shareCount)
+                like.isChecked = post.liked
+                like.text = getDecimalFormat(post.likeCount)
+                share.text = getDecimalFormat(post.shareCount)
+                options.setOnClickListener { popupMenu.show() }
 
             }
         }
-
-        private fun getLikeIcon(liked: Boolean) =
-            if (liked) R.drawable.ic_liked_24dp else R.drawable.ic_like_24dp
 
         private fun getDecimalFormat(count: Int): String = when {
             count < 1000 -> count.toString()
@@ -57,7 +78,7 @@ internal class PostAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = PostBinding.inflate(inflater, parent, false)
-        return ViewHolder(binding)
+        return ViewHolder(binding, interactionListener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
