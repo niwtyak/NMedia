@@ -43,13 +43,14 @@
         app:layout_constraintTop_toBottomOf="@id/authorName"
         tools:text="дата" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/options"
-        android:layout_width="wrap_content"
+        style="@style/Widget.AppTheme.OptionsButton"
+        android:layout_width="@dimen/icon_button_min_size"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/common_spacing"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ic_menu_24dp"
+        app:iconGravity="textStart"
+        android:checkable="true"
+        app:icon="@drawable/ic_menu_24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -78,50 +79,26 @@
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="content" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/likeIcon"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/like"
+        style="@style/Widget.AppTheme.LikeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_spacing"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ic_like_24dp"
-        app:layout_constraintEnd_toStartOf="@id/likeCount"
+        android:checkable="true"
+        app:icon="@drawable/ic_like_24"
+        app:layout_constraintEnd_toStartOf="@id/share"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrier2" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/likeCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="@dimen/common_spacing"
-        app:layout_constraintBottom_toBottomOf="@id/likeIcon"
-        app:layout_constraintStart_toEndOf="@id/likeIcon"
-        app:layout_constraintTop_toBottomOf="@id/barrier2"
-        tools:text="123" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/shareIcon"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/share"
+        style="@style/Widget.AppTheme.ShareButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/common_spacing"
-        android:layout_marginTop="@dimen/common_spacing"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ic_share_24dp"
-        app:layout_constraintEnd_toStartOf="@id/shareCount"
-        app:layout_constraintStart_toEndOf="@id/likeCount"
+        app:icon="@drawable/ic_share_24dp"
+        app:layout_constraintStart_toEndOf="@id/like"
         app:layout_constraintTop_toBottomOf="@id/barrier2" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/shareCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="@dimen/common_spacing"
-        app:layout_constraintBottom_toBottomOf="@id/shareIcon"
-        app:layout_constraintStart_toEndOf="@id/shareIcon"
-        app:layout_constraintTop_toBottomOf="@id/barrier2"
-        tools:text="123" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/viewIcon"
