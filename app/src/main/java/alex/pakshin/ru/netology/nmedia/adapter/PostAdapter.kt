@@ -1,9 +1,10 @@
 package alex.pakshin.ru.netology.nmedia.adapter
 
-import alex.pakshin.ru.netology.nmedia.Post
+import alex.pakshin.ru.netology.nmedia.data.Post
 import alex.pakshin.ru.netology.nmedia.R
 import alex.pakshin.ru.netology.nmedia.databinding.PostBinding
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
@@ -43,11 +44,22 @@ internal class PostAdapter(
         }
 
         init {
-            binding.like.setOnClickListener {
-                listener.onLikeClicked(post)
-            }
-            binding.share.setOnClickListener {
-                listener.onShareClicked(post)
+            with(binding){
+               like.setOnClickListener {
+                    listener.onLikeClicked(post)
+                }
+                share.setOnClickListener {
+                    listener.onShareClicked(post)
+                }
+                options.setOnClickListener {
+                    popupMenu.show()
+                }
+                playButton.setOnClickListener {
+                    listener.onPlayClicked(post)
+                }
+                videoPreview.setOnClickListener {
+                    listener.onPlayClicked(post)
+                }
             }
         }
 
@@ -60,8 +72,7 @@ internal class PostAdapter(
                 like.isChecked = post.liked
                 like.text = getDecimalFormat(post.likeCount)
                 share.text = getDecimalFormat(post.shareCount)
-                options.setOnClickListener { popupMenu.show() }
-
+                if (!post.url.isNullOrBlank()) videoView.visibility = View.VISIBLE
             }
         }
 

@@ -1,6 +1,6 @@
 package alex.pakshin.ru.netology.nmedia.data.impl
 
-import alex.pakshin.ru.netology.nmedia.Post
+import alex.pakshin.ru.netology.nmedia.data.Post
 import alex.pakshin.ru.netology.nmedia.data.PostRepository
 import androidx.lifecycle.MutableLiveData
 

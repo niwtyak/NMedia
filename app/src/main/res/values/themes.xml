@@ -31,9 +31,18 @@
         <item name="minWidth">@dimen/icon_button_min_size</item>
     </style>
 
-    <style name="Widget.AppTheme.OptionsButton" parent="Widget.MaterialComponents.Button.TextButton">
+    <style name="Widget.AppTheme.OptionsButton" parent="Widget.MaterialComponents.Button.TextButton.Icon">
         <item name="iconTint">?attr/colorControlNormal</item>
         <item name="backgroundTint">@color/options_background_tint</item>
+        <item name="android:textColor">?attr/colorControlNormal</item>
+        <item name="iconPadding">0dp</item>
+        <item name="minHeight">@dimen/icon_button_min_size</item>
+        <item name="minWidth">@dimen/icon_button_min_size</item>
+    </style>
+
+    <style name="Widget.AppTheme.PlayButton" parent="Widget.MaterialComponents.Button.Icon">
+        <item name="iconTint">@color/white</item>
+        <item name="backgroundTint" >?attr/colorControlNormal</item>
         <item name="android:textColor">?attr/colorControlNormal</item>
         <item name="iconPadding">0dp</item>
         <item name="minHeight">@dimen/icon_button_min_size</item>
