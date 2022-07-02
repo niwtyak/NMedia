@@ -25,7 +25,7 @@ class PostViewModel(
 
     val navigatePostContentScreenEvent = SingleLiveEvent<String>()
 
-    val navigatePostDetails  = SingleLiveEvent<String>()
+    val navigatePostDetails  = SingleLiveEvent<Long>()
 
     var currentPost = MutableLiveData<Post?>(null)
 
@@ -65,7 +65,7 @@ class PostViewModel(
     }
 
     override fun onPostClicked(post: Post) {
-        navigatePostDetails.value = Json.encodeToString(post)
+        navigatePostDetails.value = post.id
     }
 
     //endregion

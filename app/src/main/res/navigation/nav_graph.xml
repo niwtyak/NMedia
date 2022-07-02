@@ -31,8 +31,8 @@
         android:name="alex.pakshin.ru.netology.nmedia.ui.PostDetailsFragment"
         android:label="PostDetailsFragment" >
         <argument
-            android:name="post"
-            app:argType="string" />
+            android:name="postId"
+            app:argType="long" />
         <action
             android:id="@+id/post_detais_to_postContentFragment"
             app:destination="@id/postContentFragment" />

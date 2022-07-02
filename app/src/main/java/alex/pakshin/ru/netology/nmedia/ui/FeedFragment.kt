@@ -53,8 +53,8 @@ class FeedFragment : Fragment() {
             findNavController().navigate(direction)
         }
 
-        viewModel.navigatePostDetails.observe(this){ postJson->
-            val direction = FeedFragmentDirections.toPostDetailsFragment(postJson)
+        viewModel.navigatePostDetails.observe(this){ postId->
+            val direction = FeedFragmentDirections.toPostDetailsFragment(postId)
             findNavController().navigate(direction)
         }
     }

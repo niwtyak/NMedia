@@ -26,8 +26,7 @@ class PostDetailsFragment : Fragment() {
         ownerProducer = ::requireParentFragment
     )
     private val args by navArgs<PostDetailsFragmentArgs>()
-    private val post: Post by lazy {  Json.decodeFromString(args.post) }
-    private var firstLaunchFlag = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -39,24 +38,10 @@ class PostDetailsFragment : Fragment() {
                 bundle.getString(PostContentFragment.RESULT_KEY) ?: return@setFragmentResultListener
             viewModel.onSaveButtonClicked(newPostContent)
         }
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-        viewModel.data.observe(viewLifecycleOwner) { posts ->
-            println("123")
-            if (firstLaunchFlag) {
-                val currentPost = posts.find{it.id == post.id}
-                findNavController().popBackStack()
-                val direction =
-                    FeedFragmentDirections.toPostDetailsFragment(Json.encodeToString(currentPost))
-                findNavController().navigate(direction)
-            }
-            firstLaunchFlag = true
-        }
 
         viewModel.navigatePostContentScreenEvent.observe(viewLifecycleOwner) { initialContent ->
             val direction =
@@ -87,51 +72,58 @@ class PostDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = PostDetailsFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
-        val popupMenu by lazy {
-            PopupMenu(requireContext(), binding.postLayout.options).apply {
-                inflate(R.menu.options_post)
-                setOnMenuItemClickListener { menuItem ->
-                    when (menuItem.itemId) {
-                        R.id.remove -> {
-                            viewModel.onRemoveClicked(post)
-                            findNavController().popBackStack()
-                            true
+
+
+        viewModel.data.observe(viewLifecycleOwner) { posts ->
+
+            val post = posts.find { it.id == args.postId } ?: return@observe
+
+            val popupMenu by lazy {
+                PopupMenu(requireContext(), binding.postLayout.options).apply {
+                    inflate(R.menu.options_post)
+                    setOnMenuItemClickListener { menuItem ->
+                        when (menuItem.itemId) {
+                            R.id.remove -> {
+                                viewModel.onRemoveClicked(post)
+                                findNavController().popBackStack()
+                                true
+                            }
+                            R.id.edit -> {
+                                viewModel.onEditClicked(post)
+                                true
+                            }
+                            else -> false
                         }
-                        R.id.edit -> {
-                            viewModel.onEditClicked(post)
-                            true
-                        }
-                        else -> false
                     }
+                    setOnDismissListener { binding.postLayout.options.isChecked = false }
                 }
-                setOnDismissListener { binding.postLayout.options.isChecked = false }
             }
-        }
 
-        with(binding.postLayout) {
-            authorName.text = post.author
-            date.text = post.published
-            content.text = post.content
-            like.isChecked = post.liked
-            like.text = getDecimalFormat(post.likeCount)
-            share.text = getDecimalFormat(post.shareCount)
+            with(binding.postLayout) {
+                authorName.text = post.author
+                date.text = post.published
+                content.text = post.content
+                like.isChecked = post.liked
+                like.text = getDecimalFormat(post.likeCount)
+                share.text = getDecimalFormat(post.shareCount)
 
-            if (!post.url.isNullOrBlank()) videoView.visibility = View.VISIBLE
+                if (!post.url.isNullOrBlank()) videoView.visibility = View.VISIBLE
 
-            like.setOnClickListener {
-                viewModel.onLikeClicked(post)
-            }
-            share.setOnClickListener {
-                viewModel.onShareClicked(post)
-            }
-            options.setOnClickListener {
-                popupMenu.show()
-            }
-            playButton.setOnClickListener {
-                viewModel.onPlayClicked(post)
-            }
-            videoPreview.setOnClickListener {
-                viewModel.onPlayClicked(post)
+                like.setOnClickListener {
+                    viewModel.onLikeClicked(post)
+                }
+                share.setOnClickListener {
+                    viewModel.onShareClicked(post)
+                }
+                options.setOnClickListener {
+                    popupMenu.show()
+                }
+                playButton.setOnClickListener {
+                    viewModel.onPlayClicked(post)
+                }
+                videoPreview.setOnClickListener {
+                    viewModel.onPlayClicked(post)
+                }
             }
         }
     }.root
