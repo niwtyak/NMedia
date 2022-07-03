@@ -3,17 +3,16 @@ package alex.pakshin.ru.netology.nmedia.viewModel
 import alex.pakshin.ru.netology.nmedia.adapter.PostInteractionListener
 import alex.pakshin.ru.netology.nmedia.data.Post
 import alex.pakshin.ru.netology.nmedia.data.PostRepository
-import alex.pakshin.ru.netology.nmedia.data.impl.SQLiteRepository
+import alex.pakshin.ru.netology.nmedia.data.impl.PostRepositoryImpl
 import alex.pakshin.ru.netology.nmedia.db.AppDb
 import alex.pakshin.ru.netology.nmedia.util.SingleLiveEvent
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 
 class PostViewModel(
     application: Application
 ) : AndroidViewModel(application), PostInteractionListener {
-    private val repository: PostRepository = SQLiteRepository(
+    private val repository: PostRepository = PostRepositoryImpl(
         dao = AppDb.getInstance(
             context = application
         ).postDao
