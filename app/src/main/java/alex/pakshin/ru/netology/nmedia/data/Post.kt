@@ -1,4 +1,4 @@
-package alex.pakshin.ru.netology.nmedia
+package alex.pakshin.ru.netology.nmedia.data
 
 data class Post(
     val id:Long,
@@ -8,4 +8,5 @@ data class Post(
     val liked:Boolean = false,
     val likeCount:Int = 0,
     val shareCount:Int = 0,
+    val url:String? = null
 )
